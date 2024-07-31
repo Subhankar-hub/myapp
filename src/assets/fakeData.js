@@ -1,3 +1,7 @@
+import React from 'react'
+
+
+export default fakeData
 export const fakeData = [
     {
         $id: 1,
