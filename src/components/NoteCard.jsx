@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import React from "react";
 import Trash from "../icons/Trash.jsx";
 
 const NoteCard = ({ note }) => {
@@ -10,7 +11,7 @@ const NoteCard = ({ note }) => {
   
   useEffect(() => {
     autoGrow(textAreaRef);
-  }, [body]);
+  }, []);
 
   const autoGrow= ( textarea ) => {
     const { current } = textAreaRef;
