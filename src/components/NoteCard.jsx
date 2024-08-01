@@ -1,17 +1,50 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import React from "react";
 import Trash from "../icons/Trash.jsx";
 
 const NoteCard = ({ note }) => {
-  let position = JSON.parse(note.position);
+  //let position = JSON.parse(note.position);
+  const [ position, setPosition ] = useState(JSON.parse(note.position));
   const colors = JSON.parse(note.colors);
   const body = JSON.parse(note.body);
 
+  
+
+  let mouseStartPos = { x : 0, y: 0};
+  const cardRef = useRef(null);
+
   const textAreaRef = useRef(null);
+
+  const mouseDown = (e) => {
+    mouseStartPos.x = e.clientX;
+    mouseStartPos.y = e.clientY;
+ 
+    document.addEventListener("mousemove", mouseMove);
+};
+
+  const mouseMove = (e) => {
+    // calculate the move direction
+
+    const mouseMoveDirection={
+      x: mouseStartPos.x - e.clientX,
+      y: mouseStartPos.y - e.clientY,
+    };
+
+    // update start position for next move
+    mouseStartPos.x = e.clientX;
+    mouseStartPos.y = e.clientY;
+
+    // update card top and left position
+    setPosition({
+      x:cardRef.current.offsetLeft - mouseMoveDirection.x,
+      y:cardRef.current.offsetTop - mouseMoveDirection.y,
+    });
+
+  };
   
   useEffect(() => {
     autoGrow(textAreaRef);
-  }, []);
+  },);
 
   const autoGrow= ( textarea ) => {
     const { current } = textAreaRef;
@@ -21,7 +54,9 @@ const NoteCard = ({ note }) => {
   }
 
   return (
-      <div className="card"
+      <div
+      ref = {cardRef}
+      className="card"
           style={{
               backgroundColor: colors.colorBody,
               left:`${position.x}px`,
@@ -31,6 +66,7 @@ const NoteCard = ({ note }) => {
       >
        <div
        className="card-header"
+       onMouseDown={ mouseDown }
        style={{ backgroundColor: colors.colorHeader }}
        >
         <Trash />
