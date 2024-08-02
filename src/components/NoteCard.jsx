@@ -15,11 +15,17 @@ const NoteCard = ({ note }) => {
 
   const textAreaRef = useRef(null);
 
+  const mouseUp = () => {
+    document.removeEventListener("mousemove", mouseMove);
+    document.removeEventListener("mouseup", mouseUp);
+  }
+
   const mouseDown = (e) => {
     mouseStartPos.x = e.clientX;
     mouseStartPos.y = e.clientY;
  
     document.addEventListener("mousemove", mouseMove);
+    document.addEventListener("mouseup", mouseUp);
 };
 
   const mouseMove = (e) => {
